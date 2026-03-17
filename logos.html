@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Adiran Tech — Glitch Variations</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#090808;color:#F2EAE0;font-family:'Space Grotesk',sans-serif;padding:60px 40px}
+  h1{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#7A6860;margin-bottom:16px}
+
+  /* Reference bar */
+  .ref-row{display:flex;align-items:center;gap:24px;margin-bottom:48px;padding:20px 28px;background:#141010;border:1px solid #FF5C1A22;border-radius:16px;width:fit-content}
+  .ref-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:#FF5C1A}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{background:#141010;border:1px solid #1E1818;border-radius:24px;padding:52px 24px 36px;display:flex;flex-direction:column;align-items:center;gap:32px}
+  .logo-area{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;min-height:190px}
+  .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:#7A6860;text-align:center}
+  .wm{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.18em;color:#F2EAE0}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:#7A6860;margin-top:3px}
+  .wm-block{text-align:center}
+  .variants{display:flex;gap:12px}
+  .vd{background:#090808;border:1px solid #1E1818;border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:center}
+  .vl{background:#F2EAE0;border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:center}
+
+  @keyframes scanline{0%{transform:translateY(-200%)}100%{transform:translateY(600%)}}
+  @keyframes flicker{0%,96%,98%,100%{opacity:1}97%,99%{opacity:.4}}
+  @keyframes rgb-shift{0%,100%{transform:translate(0,0)}25%{transform:translate(4px,0)}75%{transform:translate(-4px,0)}}
+  @keyframes rgb-shift2{0%,100%{transform:translate(0,0)}25%{transform:translate(-5px,0)}75%{transform:translate(5px,0)}}
+  @keyframes slice-jitter{0%,90%,100%{transform:translate(0,0)}91%{transform:translate(8px,0)}93%{transform:translate(-6px,0)}95%{transform:translate(4px,0)}97%{transform:translate(0,0)}}
+  @keyframes noise-flicker{0%,89%,100%{opacity:0}90%,94%{opacity:.06}91%,95%{opacity:.03}}
+</style>
+</head>
+<body>
+<h1>Adiran Tech — Glitch Variations</h1>
+
+<!-- Reference -->
+<div class="ref-row">
+  <div>
+    <div class="ref-label" style="margin-bottom:10px;">Original — A3 Glitch</div>
+    <div style="position:relative;width:60px;height:66px;">
+      <svg style="position:absolute;top:0;left:0;" width="60" height="66" viewBox="0 0 100 110" fill="none">
+        <path d="M50 6 L88 104 L72 104 L64 82 L36 82 L28 104 L12 104 Z" fill="#F2EAE0"/>
+        <path d="M50 26 L64 74 L36 74 Z" fill="#141010"/>
+        <line x1="38" y1="66" x2="62" y2="66" stroke="#141010" stroke-width="4"/>
+      </svg>
+      <svg style="position:absolute;top:0;left:0;clip-path:inset(0 0 88% 0);transform:translate(5px,0);" width="60" height="66" viewBox="0 0 100 110" fill="none">
+        <path d="M50 6 L88 104 L72 104 L64 82 L36 82 L28 104 L12 104 Z" fill="#FF5C1A"/>
+      </svg>
+      <svg style="position:absolute;top:0;left:0;clip-path:inset(50% 0 36% 0);transform:translate(-5px,0);" width="60" height="66" viewBox="0 0 100 110" fill="none">
+        <path d="M50 6 L88 104 L72 104 L64 82 L36 82 L28 104 L12 104 Z" fill="#FF5C1A"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+
+<div class="grid">
+
+<!-- ════════════════════════════════
+     3A — RGB CHROMATIC ABERRATION
+     Three copies of the A offset in
+     red / green / blue channels —
+     like a camera lens split or
+     broken display. Classic cyberpunk.
+════════════════════════════════ -->
+<div class="card">
+  <div class="logo-area">
+    <div style="position:relative;width:108px;height:118px;">
+
+      <!-- Blue channel — shifted left -->
+      <svg style="position:absolute;top:0;left:0;mix-blend-mode:screen;animation:rgb-shift2 4s ease-in-out infinite;" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#4488FF" opacity=".7"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+      </svg>
+
+      <!-- Red channel — shifted right -->
+      <svg style="position:absolute;top:0;left:0;mix-blend-mode:screen;animation:rgb-shift 4s ease-in-out infinite;" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF3333" opacity=".7"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+      </svg>
+
+      <!-- White/base channel — center, solid -->
+      <svg style="position:absolute;top:0;left:0;" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0" opacity=".9"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+        <!-- Orange crossbar -->
+        <rect x="40" y="70" width="28" height="6" rx="3" fill="#FF5C1A"/>
+        <!-- Gold apex ring -->
+        <circle cx="54" cy="6" r="4" fill="none" stroke="#FFB800" stroke-width="2"/>
+        <circle cx="54" cy="6" r="1.5" fill="#FFB800"/>
+      </svg>
+
+      <!-- Scan line sweep -->
+      <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:4px;">
+        <div style="position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent 0%,#FF5C1A33 40%,#FF5C1A55 50%,#FF5C1A33 60%,transparent 100%);animation:scanline 2.5s linear infinite;"></div>
+      </div>
+    </div>
+
+    <div class="wm-block">
+      <div class="wm">ADIRAN TECH</div>
+      <div class="sub">Blue-Collar Tech Company</div>
+    </div>
+  </div>
+
+  <div class="variants">
+    <div class="vd">
+      <div style="position:relative;width:44px;height:48px;">
+        <svg style="position:absolute;top:0;left:0;mix-blend-mode:screen;" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#4488FF" opacity=".7"/>
+          <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;mix-blend-mode:screen;transform:translate(5px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF3333" opacity=".7"/>
+          <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0" opacity=".85"/>
+          <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+          <rect x="40" y="70" width="28" height="6" rx="3" fill="#FF5C1A"/>
+        </svg>
+      </div>
+    </div>
+    <div class="vl">
+      <div style="position:relative;width:44px;height:48px;background:#F2EAE0;">
+        <svg style="position:absolute;top:0;left:0;" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#090808"/>
+          <path d="M54 28 L69 80 L39 80 Z" fill="#F2EAE0"/>
+          <rect x="40" y="70" width="28" height="6" rx="3" fill="#FF5C1A"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;mix-blend-mode:multiply;transform:translate(4px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A" opacity=".4"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <span class="lbl">3A — Chromatic</span>
+</div>
+
+
+<!-- ════════════════════════════════
+     3B — HARD SLICE / DATA CORRUPT
+     The A is cut into 7 sharp bands.
+     Each band aggressively offset
+     by different amounts.
+     Some bands are orange/gold.
+     Looks like corrupted video data.
+════════════════════════════════ -->
+<div class="card">
+  <div class="logo-area">
+    <div style="position:relative;width:108px;height:118px;animation:flicker 6s linear infinite;">
+
+      <!-- Base A — very faint ghost -->
+      <svg style="position:absolute;top:0;left:0;opacity:.08;" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+      </svg>
+
+      <!-- Slice 1 — top tip, shift right a lot, orange -->
+      <svg style="position:absolute;top:0;left:0;clip-path:inset(0% 0 91% 0);transform:translate(12px,0);" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+      </svg>
+
+      <!-- Slice 2 — shift left -->
+      <svg style="position:absolute;top:0;left:0;clip-path:inset(9% 0 77% 0);transform:translate(-8px,0);" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+      </svg>
+
+      <!-- Slice 3 — no shift, full white -->
+      <svg style="position:absolute;top:0;left:0;clip-path:inset(23% 0 58% 0);transform:translate(0px,0);" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+      </svg>
+
+      <!-- Slice 4 — crossbar zone, shift right, GOLD -->
+      <svg style="position:absolute;top:0;left:0;clip-path:inset(42% 0 44% 0);transform:translate(14px,0);" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FFB800"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+      </svg>
+
+      <!-- Slice 5 — shift left -->
+      <svg style="position:absolute;top:0;left:0;clip-path:inset(56% 0 28% 0);transform:translate(-10px,0);" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+      </svg>
+
+      <!-- Slice 6 — orange, shift right -->
+      <svg style="position:absolute;top:0;left:0;clip-path:inset(72% 0 14% 0);transform:translate(7px,0);" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+      </svg>
+
+      <!-- Slice 7 — bottom feet, shift left -->
+      <svg style="position:absolute;top:0;left:0;clip-path:inset(86% 0 0% 0);transform:translate(-6px,0);" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0" opacity=".6"/>
+      </svg>
+
+      <!-- Noise overlay -->
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,92,26,.03) 2px,rgba(255,92,26,.03) 4px);pointer-events:none;animation:noise-flicker 0.5s linear infinite;"></div>
+    </div>
+
+    <div class="wm-block">
+      <div class="wm">ADIRAN TECH</div>
+      <div class="sub">Blue-Collar Tech Company</div>
+    </div>
+  </div>
+
+  <div class="variants">
+    <div class="vd">
+      <div style="position:relative;width:44px;height:48px;">
+        <svg style="position:absolute;top:0;left:0;clip-path:inset(0% 0 91% 0);transform:translate(8px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;clip-path:inset(9% 0 77% 0);transform:translate(-5px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;clip-path:inset(23% 0 58% 0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;clip-path:inset(42% 0 44% 0);transform:translate(8px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FFB800"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;clip-path:inset(56% 0 28% 0);transform:translate(-6px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;clip-path:inset(72% 0 14% 0);transform:translate(5px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;clip-path:inset(86% 0 0% 0);transform:translate(-4px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0" opacity=".5"/>
+        </svg>
+      </div>
+    </div>
+    <div class="vl">
+      <div style="position:relative;width:44px;height:48px;">
+        <svg style="position:absolute;top:0;left:0;" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#090808"/>
+          <path d="M54 28 L69 80 L39 80 Z" fill="#F2EAE0"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;clip-path:inset(42% 0 44% 0);transform:translate(7px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;clip-path:inset(0% 0 91% 0);transform:translate(8px,0);" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <span class="lbl">3B — Data Corrupt</span>
+</div>
+
+
+<!-- ════════════════════════════════
+     3C — CRT / PHOSPHOR
+     The A rendered as if on an old
+     CRT monitor — phosphor green glow
+     replaced with brand orange.
+     Horizontal scan lines baked in.
+     Soft blur halo around the letter.
+════════════════════════════════ -->
+<div class="card">
+  <div class="logo-area">
+    <div style="position:relative;width:108px;height:118px;">
+
+      <!-- Outer glow halo — very soft -->
+      <svg style="position:absolute;top:-8px;left:-8px;filter:blur(14px);opacity:.35;" width="124" height="134" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+      </svg>
+
+      <!-- Mid glow -->
+      <svg style="position:absolute;top:-4px;left:-4px;filter:blur(6px);opacity:.25;" width="116" height="126" viewBox="0 0 108 118" fill="none">
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FFB800"/>
+      </svg>
+
+      <!-- Sharp base letter -->
+      <svg style="position:absolute;top:0;left:0;" width="108" height="118" viewBox="0 0 108 118" fill="none">
+        <!-- Main A fill — bright orange core -->
+        <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+        <!-- Counter (inner triangle) - void -->
+        <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+        <!-- Bright white highlight edge on left leg -->
+        <line x1="12" y1="112" x2="54" y2="6" stroke="#FFE0CC" stroke-width="1.5" opacity=".5"/>
+        <!-- Gold crossbar -->
+        <rect x="40" y="68" width="28" height="8" rx="4" fill="#FFB800"/>
+        <!-- Bright apex tip -->
+        <circle cx="54" cy="6" r="3" fill="#FFFFFF" opacity=".9"/>
+      </svg>
+
+      <!-- CRT scanlines overlay -->
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.45) 3px,rgba(0,0,0,.45) 4px);pointer-events:none;border-radius:2px;"></div>
+
+      <!-- Horizontal glitch bar — thin bright line -->
+      <div style="position:absolute;left:0;right:0;height:1px;background:#FF5C1A;opacity:.8;top:38%;"></div>
+
+      <!-- Screen vignette -->
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,#090808 100%);pointer-events:none;border-radius:2px;opacity:.6;"></div>
+    </div>
+
+    <div class="wm-block">
+      <div class="wm">ADIRAN TECH</div>
+      <div class="sub">Blue-Collar Tech Company</div>
+    </div>
+  </div>
+
+  <div class="variants">
+    <div class="vd">
+      <div style="position:relative;width:44px;height:48px;">
+        <svg style="position:absolute;top:-3px;left:-3px;filter:blur(5px);opacity:.4;" width="50" height="54" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+        </svg>
+        <svg style="position:absolute;top:0;left:0;" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+          <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+          <rect x="40" y="68" width="28" height="8" rx="4" fill="#FFB800"/>
+          <circle cx="54" cy="6" r="3" fill="#fff" opacity=".9"/>
+        </svg>
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.5) 3px,rgba(0,0,0,.5) 4px);pointer-events:none;"></div>
+      </div>
+    </div>
+    <div class="vl">
+      <div style="position:relative;width:44px;height:48px;">
+        <svg style="position:absolute;top:0;left:0;" width="44" height="48" viewBox="0 0 108 118" fill="none">
+          <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#090808"/>
+          <path d="M54 28 L69 80 L39 80 Z" fill="#F2EAE0"/>
+          <rect x="40" y="68" width="28" height="8" rx="4" fill="#FF5C1A"/>
+          <circle cx="54" cy="6" r="3" fill="#FF5C1A" opacity=".9"/>
+        </svg>
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(242,234,224,.12) 3px,rgba(242,234,224,.12) 4px);pointer-events:none;"></div>
+      </div>
+    </div>
+  </div>
+  <span class="lbl">3C — Phosphor</span>
+</div>
+
+
+</div>
+<div style="margin-top:48px;display:flex;gap:24px;align-items:center;">
+  <div style="display:flex;gap:8px;align-items:center;"><div style="width:12px;height:12px;background:#FF5C1A;border-radius:3px;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#3a2e2a;">#FF5C1A</span></div>
+  <div style="display:flex;gap:8px;align-items:center;"><div style="width:12px;height:12px;background:#FFB800;border-radius:3px;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#3a2e2a;">#FFB800</span></div>
+  <div style="display:flex;gap:8px;align-items:center;"><div style="width:12px;height:12px;background:#F2EAE0;border-radius:3px;border:1px solid #1E1818;"></div><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#3a2e2a;">#F2EAE0</span></div>
+</div>
+</body>
+</html>

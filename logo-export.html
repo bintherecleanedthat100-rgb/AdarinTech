@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#090808;display:flex;align-items:center;justify-content:center;width:800px;height:800px;overflow:hidden;}
+  #logo{display:flex;flex-direction:column;align-items:center;gap:32px;}
+</style>
+</head>
+<body>
+<div id="logo">
+
+  <!-- Data Corrupt A — scaled up 3x -->
+  <div style="position:relative;width:324px;height:354px;">
+
+    <!-- Base ghost -->
+    <svg style="position:absolute;top:0;left:0;opacity:.08;" width="324" height="354" viewBox="0 0 108 118" fill="none">
+      <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+      <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+    </svg>
+
+    <!-- Slice 1 — top tip, orange, hard right -->
+    <svg style="position:absolute;top:0;left:0;clip-path:inset(0% 0 91% 0);transform:translate(36px,0);" width="324" height="354" viewBox="0 0 108 118" fill="none">
+      <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+      <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+    </svg>
+
+    <!-- Slice 2 — shift left -->
+    <svg style="position:absolute;top:0;left:0;clip-path:inset(9% 0 77% 0);transform:translate(-24px,0);" width="324" height="354" viewBox="0 0 108 118" fill="none">
+      <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+      <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+    </svg>
+
+    <!-- Slice 3 — centered, white -->
+    <svg style="position:absolute;top:0;left:0;clip-path:inset(23% 0 58% 0);transform:translate(0px,0);" width="324" height="354" viewBox="0 0 108 118" fill="none">
+      <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+      <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+    </svg>
+
+    <!-- Slice 4 — crossbar zone, gold, hard right -->
+    <svg style="position:absolute;top:0;left:0;clip-path:inset(42% 0 44% 0);transform:translate(42px,0);" width="324" height="354" viewBox="0 0 108 118" fill="none">
+      <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FFB800"/>
+      <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+    </svg>
+
+    <!-- Slice 5 — shift left -->
+    <svg style="position:absolute;top:0;left:0;clip-path:inset(56% 0 28% 0);transform:translate(-30px,0);" width="324" height="354" viewBox="0 0 108 118" fill="none">
+      <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0"/>
+      <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+    </svg>
+
+    <!-- Slice 6 — orange, shift right -->
+    <svg style="position:absolute;top:0;left:0;clip-path:inset(72% 0 14% 0);transform:translate(21px,0);" width="324" height="354" viewBox="0 0 108 118" fill="none">
+      <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#FF5C1A"/>
+      <path d="M54 28 L69 80 L39 80 Z" fill="#090808"/>
+    </svg>
+
+    <!-- Slice 7 — bottom feet, shift left, faded -->
+    <svg style="position:absolute;top:0;left:0;clip-path:inset(86% 0 0% 0);transform:translate(-18px,0);" width="324" height="354" viewBox="0 0 108 118" fill="none">
+      <path d="M54 6 L96 112 L78 112 L69 88 L39 88 L30 112 L12 112 Z" fill="#F2EAE0" opacity=".6"/>
+    </svg>
+
+    <!-- Scan lines -->
+    <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 5px,rgba(0,0,0,.35) 5px,rgba(0,0,0,.35) 6px);pointer-events:none;"></div>
+  </div>
+
+  <!-- Wordmark -->
+  <div style="text-align:center;">
+    <div style="font-family:'Anton',sans-serif;font-size:42px;letter-spacing:.2em;color:#F2EAE0;line-height:1;">ADIRAN TECH</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#7A6860;margin-top:8px;">Blue-Collar Tech Company</div>
+  </div>
+
+</div>
+</body>
+</html>
