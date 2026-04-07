@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Globe, AppWindow, Code2, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -85,10 +86,10 @@ export default function Services() {
                   </li>
                 ))}
               </ul>
-              <a href="#contact" className={`flex items-center gap-2 text-${s.accent} font-sans font-600 text-sm group/btn mt-auto`}>
+              <Link to="/contact" className={`flex items-center gap-2 text-${s.accent} font-sans font-600 text-sm group/btn mt-auto`}>
                 Learn More
                 <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
-              </a>
+              </Link>
             </div>
           ))}
         </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export default function Hero() {
   const heroRef = useRef(null)
@@ -76,11 +77,11 @@ export default function Hero() {
             <div className="font-hero text-4xl text-snow tracking-tight">14 Days</div>
             <div className="font-mono text-xs text-dim mt-1 uppercase tracking-widest">Avg Launch Time</div>
           </div>
-          <a href="#contact"
+          <Link to="/contact"
             className="hero-bottom inline-flex items-center gap-2 bg-cyan text-void font-sans font-700 text-sm px-7 py-4 rounded-xl hover:bg-cyan/90 active:scale-[0.97] transition-all duration-200 shadow-xl shadow-cyan/20 group whitespace-nowrap">
             Book a Free Strategy Call
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
