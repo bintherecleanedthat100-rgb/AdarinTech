@@ -54,7 +54,7 @@ export default function About() {
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-cyan mb-4">The Founder</p>
             <h2 className="font-display font-700 text-4xl md:text-5xl text-snow leading-tight mb-6">
-              I've Been in<br />Your Boots.
+              Every business has a story.<br /><span className="text-cyan">Here's ours.</span>
             </h2>
             <div className="space-y-4 mb-8">
               <p className="font-sans text-snow/60 text-base leading-relaxed">

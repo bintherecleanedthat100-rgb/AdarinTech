@@ -98,7 +98,7 @@ export default function AboutPage() {
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-cyan mb-5">The Origin</p>
             <h2 className="font-display font-700 text-4xl md:text-5xl text-snow leading-tight mb-8">
-              Built for the Trade<br /><span className="text-cyan">World. From the Inside.</span>
+              Every business has a story.<br /><span className="text-cyan">Here's ours.</span>
             </h2>
             <div className="space-y-5 mb-10">
               <p className="font-sans text-snow/60 text-base leading-relaxed">
