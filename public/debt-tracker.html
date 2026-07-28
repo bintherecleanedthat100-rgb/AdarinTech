@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f4c46">
+<title>Debt Payoff Tracker</title>
+<style>
+  :root{
+    --bg:#f4f6f5; --card:#ffffff; --ink:#1c2b28; --muted:#5f7370;
+    --accent:#0f4c46; --accent-soft:#e3efed; --attack:#b3541e; --attack-soft:#fdf0e7;
+    --good:#2e7d5b; --warn:#b3541e; --danger:#b0322a; --danger-soft:#fbeae8;
+    --border:#dde5e3; --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.45;
+    padding-bottom:calc(24px + env(safe-area-inset-bottom));
+  }
+  .wrap{max-width:520px; margin:0 auto; padding:16px 14px;}
+  header{padding:18px 2px 6px;}
+  header h1{font-size:1.35rem; font-weight:700;}
+  header p{color:var(--muted); font-size:.85rem;}
+  .panel{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px; margin-top:14px; box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+  .panel h2{font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:10px;}
+  /* ---- summary ---- */
+  .big-num{font-size:2rem; font-weight:800; letter-spacing:-.02em;}
+  .sub{color:var(--muted); font-size:.85rem;}
+  .stat-row{display:flex; gap:10px; margin-top:12px;}
+  .stat{flex:1; background:var(--accent-soft); border-radius:10px; padding:10px; text-align:center;}
+  .stat .v{font-weight:700; font-size:1.02rem;}
+  .stat .l{font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;}
+  .bar{height:14px; background:#e6ebea; border-radius:999px; overflow:hidden; margin-top:14px;}
+  .bar>div{height:100%; background:linear-gradient(90deg,var(--good),#4aa87f); border-radius:999px; transition:width .5s ease; min-width:4px;}
+  .bar-label{display:flex; justify-content:space-between; font-size:.78rem; color:var(--muted); margin-top:5px;}
+  /* ---- extra payment ---- */
+  .extra-input{display:flex; align-items:center; gap:8px; margin-top:4px;}
+  .extra-input .dollar{font-size:1.4rem; font-weight:700; color:var(--muted);}
+  input,select,button{font:inherit;}
+  input[type=number],input[type=text],input[type=date],select{
+    width:100%; padding:13px 12px; border:1.5px solid var(--border); border-radius:10px;
+    background:#fbfcfc; font-size:1.05rem; color:var(--ink); min-height:48px;
+  }
+  input:focus,select:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent);}
+  .extra-input input{font-size:1.4rem; font-weight:700;}
+  input[type=range]{width:100%; margin-top:12px; accent-color:var(--accent); height:36px;}
+  .scenario{display:flex; justify-content:space-between; font-size:.8rem; color:var(--muted); margin-top:2px;}
+  .hint{font-size:.8rem; color:var(--muted); margin-top:8px;}
+  /* ---- cards ---- */
+  .card-item{
+    border:1.5px solid var(--border); border-radius:12px; padding:12px; margin-top:10px;
+    background:#fff; position:relative;
+  }
+  .card-item.attack{border-color:var(--attack); background:var(--attack-soft);}
+  .card-item.paid{opacity:.65; background:#f2f7f4; border-color:#cfe3d8;}
+  .badge{
+    display:inline-block; font-size:.66rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+    padding:3px 8px; border-radius:999px; margin-left:6px; vertical-align:2px;
+  }
+  .badge.attack-b{background:var(--attack); color:#fff;}
+  .badge.paid-b{background:var(--good); color:#fff;}
+  .badge.promo-b{background:#e8eef4; color:#33586e;}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
+  .card-name{font-weight:700; font-size:1.02rem;}
+  .card-order{font-size:.72rem; color:var(--muted);}
+  .card-bal{font-weight:800; font-size:1.1rem; text-align:right; white-space:nowrap;}
+  .card-meta{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:.8rem; color:var(--muted); margin-top:6px;}
+  .card-payoff{font-size:.78rem; color:var(--good); margin-top:4px; font-weight:600;}
+  .promo-warn{
+    margin-top:8px; font-size:.82rem; font-weight:600; color:var(--warn);
+    background:#fdf3ea; border:1px solid #f0d9c3; border-radius:8px; padding:8px 10px;
+  }
+  .promo-warn.urgent{color:var(--danger); background:var(--danger-soft); border-color:#eec7c3;}
+  .mini-bar{height:6px; background:#e6ebea; border-radius:999px; overflow:hidden; margin-top:8px;}
+  .mini-bar>div{height:100%; background:var(--good); border-radius:999px;}
+  .card-actions{display:flex; gap:8px; margin-top:10px;}
+  /* ---- buttons ---- */
+  button{
+    border:none; border-radius:10px; padding:12px 16px; font-weight:600; cursor:pointer;
+    min-height:46px; -webkit-tap-highlight-color:transparent;
+  }
+  .btn-primary{background:var(--accent); color:#fff; width:100%; font-size:1.02rem;}
+  .btn-primary:active{transform:scale(.98);}
+  .btn-ghost{background:var(--accent-soft); color:var(--accent); flex:1;}
+  .btn-danger-ghost{background:var(--danger-soft); color:var(--danger); flex:0 0 auto;}
+  .btn-small{padding:9px 12px; min-height:40px; font-size:.88rem;}
+  .btn-row{display:flex; gap:8px; margin-top:12px;}
+  /* ---- forms / modal ---- */
+  .modal-back{
+    position:fixed; inset:0; background:rgba(20,35,32,.45); display:none;
+    align-items:flex-end; justify-content:center; z-index:50;
+  }
+  .modal-back.open{display:flex;}
+  .modal{
+    background:#fff; width:100%; max-width:520px; border-radius:18px 18px 0 0;
+    padding:18px 16px calc(20px + env(safe-area-inset-bottom)); max-height:88vh; overflow-y:auto;
+  }
+  .modal h3{font-size:1.1rem; margin-bottom:12px;}
+  .field{margin-top:12px;}
+  .field label{display:block; font-size:.8rem; font-weight:600; color:var(--muted); margin-bottom:5px;}
+  /* ---- payments log ---- */
+  .pay-item{
+    display:flex; justify-content:space-between; align-items:center; gap:8px;
+    padding:10px 2px; border-bottom:1px solid var(--border); font-size:.9rem;
+  }
+  .pay-item:last-child{border-bottom:none;}
+  .pay-item .amt{font-weight:700; color:var(--good); white-space:nowrap;}
+  .pay-item .who{font-weight:600;}
+  .pay-item .when{color:var(--muted); font-size:.78rem;}
+  .pay-del{background:none; color:var(--danger); font-size:.8rem; padding:8px; min-height:36px;}
+  .empty{color:var(--muted); font-size:.88rem; padding:8px 0;}
+  /* ---- warning banner ---- */
+  .alert{border-radius:10px; padding:10px 12px; font-size:.86rem; font-weight:600; margin-top:10px;}
+  .alert.bad{background:var(--danger-soft); color:var(--danger);}
+  /* ---- celebration ---- */
+  .celebrate-back{
+    position:fixed; inset:0; background:rgba(15,76,70,.92); display:none; z-index:100;
+    align-items:center; justify-content:center; text-align:center; color:#fff; padding:24px;
+  }
+  .celebrate-back.open{display:flex;}
+  .celebrate h2{font-size:1.7rem; margin:10px 0 6px;}
+  .celebrate p{opacity:.9; margin-bottom:20px;}
+  .celebrate .emoji{font-size:3.4rem;}
+  .celebrate button{background:#fff; color:var(--accent); padding:14px 28px; font-size:1.05rem;}
+  .confetti{position:fixed; top:-30px; font-size:1.4rem; z-index:101; pointer-events:none; animation:fall linear forwards;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg); opacity:.6;}}
+  footer{margin-top:22px; text-align:center; font-size:.75rem; color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Debt Payoff Tracker</h1>
+    <p>Avalanche method &middot; highest APR first &middot; data stays on this phone</p>
+  </header>
+
+  <!-- SUMMARY -->
+  <section class="panel">
+    <h2>Where you stand</h2>
+    <div class="big-num" id="totalRemaining">$0</div>
+    <div class="sub">total remaining across <span id="cardCount">0</span> cards</div>
+    <div class="stat-row">
+      <div class="stat"><div class="v" id="debtFreeDate">—</div><div class="l">Debt-free</div></div>
+      <div class="stat"><div class="v" id="monthsLeft">—</div><div class="l">Months</div></div>
+      <div class="stat"><div class="v" id="totalInterest">—</div><div class="l">Interest</div></div>
+    </div>
+    <div class="bar"><div id="progressBar" style="width:0%"></div></div>
+    <div class="bar-label">
+      <span id="paidOffLabel">$0 paid off</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div id="budgetAlert"></div>
+  </section>
+
+  <!-- EXTRA PAYMENT -->
+  <section class="panel">
+    <h2>Extra payment this month</h2>
+    <div class="extra-input">
+      <span class="dollar">$</span>
+      <input type="number" id="extraInput" inputmode="decimal" min="0" step="25" placeholder="0">
+    </div>
+    <input type="range" id="extraSlider" min="0" max="3000" step="25" value="0" aria-label="Extra payment slider">
+    <div class="scenario"><span>$0</span><span>slide to compare scenarios</span><span>$3,000</span></div>
+    <div class="hint">On top of <strong id="minTotal">$0</strong>/mo in minimums. All extra attacks the highest-APR card, then rolls to the next (true avalanche).</div>
+  </section>
+
+  <!-- CARD LIST -->
+  <section class="panel">
+    <h2>Payoff order (avalanche)</h2>
+    <div id="cardList"></div>
+    <div class="btn-row">
+      <button class="btn-primary" id="addCardBtn">+ Add card</button>
+    </div>
+  </section>
+
+  <!-- LOG PAYMENT -->
+  <section class="panel">
+    <h2>Log a payment</h2>
+    <div class="field"><label for="payCard">Card</label><select id="payCard"></select></div>
+    <div class="field"><label for="payAmount">Amount</label>
+      <input type="number" id="payAmount" inputmode="decimal" min="0" step="1" placeholder="0.00"></div>
+    <div class="field"><label for="payDate">Date</label><input type="date" id="payDate"></div>
+    <div class="btn-row"><button class="btn-primary" id="logPayBtn">Log payment</button></div>
+  </section>
+
+  <!-- HISTORY -->
+  <section class="panel">
+    <h2>Payment history</h2>
+    <div id="payHistory"></div>
+  </section>
+
+  <!-- BACKUP -->
+  <section class="panel">
+    <h2>Backup</h2>
+    <div class="btn-row">
+      <button class="btn-ghost" id="exportBtn">Export JSON</button>
+      <button class="btn-ghost" id="importBtn">Import JSON</button>
+    </div>
+    <input type="file" id="importFile" accept=".json,application/json" hidden>
+    <p class="hint">Everything lives in this browser's localStorage. Export now and then so a cleared browser can't wipe your history.</p>
+  </section>
+
+  <footer>Offline-ready &middot; no account, no server, no tracking</footer>
+</div>
+
+<!-- CARD EDIT MODAL -->
+<div class="modal-back" id="cardModal">
+  <div class="modal">
+    <h3 id="cardModalTitle">Add card</h3>
+    <div class="field"><label for="fName">Card name</label><input type="text" id="fName" placeholder="e.g. CFNA"></div>
+    <div class="field"><label for="fBalance">Current balance ($)</label><input type="number" id="fBalance" inputmode="decimal" min="0" step="0.01"></div>
+    <div class="field"><label for="fApr">APR (%)</label><input type="number" id="fApr" inputmode="decimal" min="0" step="0.01"></div>
+    <div class="field"><label for="fMin">Minimum payment ($/mo)</label><input type="number" id="fMin" inputmode="decimal" min="0" step="0.01"></div>
+    <div class="field"><label for="fPromo">0% promo end date (optional)</label><input type="date" id="fPromo"></div>
+    <div class="field"><label for="fStart">Starting balance ($) — used for the progress bar</label><input type="number" id="fStart" inputmode="decimal" min="0" step="0.01"></div>
+    <div class="btn-row">
+      <button class="btn-primary" id="saveCardBtn">Save</button>
+      <button class="btn-danger-ghost" id="deleteCardBtn" style="display:none">Delete</button>
+    </div>
+    <div class="btn-row"><button class="btn-ghost" id="cancelCardBtn">Cancel</button></div>
+  </div>
+</div>
+
+<!-- CELEBRATION -->
+<div class="celebrate-back" id="celebrate">
+  <div class="celebrate">
+    <div class="emoji">🎉</div>
+    <h2 id="celebrateTitle">Card paid off!</h2>
+    <p id="celebrateMsg"></p>
+    <button id="celebrateClose">Keep going</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============ storage ============ */
+const KEY = "debtTracker.v1";
+const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+
+function defaultState() {
+  const mk = (name, balance, apr, minPayment, promoEnd) =>
+    ({ id: uid(), name, balance, startBalance: balance, apr, minPayment, promoEnd: promoEnd || "" });
+  // APRs marked * are placeholders (only CFNA and Platinum were known) — edit every card
+  // with your real balance, APR, and minimum from your latest statements.
+  return {
+    cards: [
+      mk("CFNA",           4000, 33.24, 120, ""),
+      mk("QuicksilverOne", 3500, 29.99, 105, ""), // * placeholder APR
+      mk("Freedom Flex",   3500, 28.49, 105, ""), // * placeholder APR
+      mk("Amex Gold",      3500, 27.24, 105, ""), // * placeholder APR
+      mk("Ink Unlimited",  3500, 25.99, 105, ""), // * placeholder APR
+      mk("Platinum",       4470, 10.00,  90, ""),
+      mk("Best Buy",        930,  0.00,  35, ""), // set your promo end date!
+    ],
+    payments: [],
+    extra: 0,
+  };
+}
+
+let state;
+try {
+  state = JSON.parse(localStorage.getItem(KEY)) || defaultState();
+  if (!Array.isArray(state.cards)) state = defaultState();
+} catch (e) { state = defaultState(); }
+
+const save = () => localStorage.setItem(KEY, JSON.stringify(state));
+
+/* ============ helpers ============ */
+const $ = (id) => document.getElementById(id);
+const fmt$ = (n) => "$" + Math.round(n).toLocaleString("en-US");
+const fmt$c = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const monthName = (d) => d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+
+function sortedCards() {
+  // avalanche: highest APR first; paid-off cards sink to the bottom
+  return [...state.cards].sort((a, b) => {
+    const aPaid = a.balance <= 0.005, bPaid = b.balance <= 0.005;
+    if (aPaid !== bPaid) return aPaid ? 1 : -1;
+    return b.apr - a.apr;
+  });
+}
+const attackCard = () => sortedCards().find(c => c.balance > 0.005) || null;
+
+function promoStatus(card) {
+  if (!card.promoEnd || card.balance <= 0.005) return null;
+  const days = Math.ceil((new Date(card.promoEnd + "T00:00:00") - new Date()) / 86400000);
+  if (days < 0)  return { days, cls: "urgent", text: "⚠️ 0% promo ENDED " + (-days) + " days ago — deferred interest may hit. Pay this off or check your statement now." };
+  if (days <= 30) return { days, cls: "urgent", text: "⚠️ 0% promo ends in " + days + " day" + (days === 1 ? "" : "s") + " (" + card.promoEnd + ") with a balance left — pay it off before deferred interest hits!" };
+  if (days <= 90) return { days, cls: "", text: "⏳ 0% promo ends in " + days + " days (" + card.promoEnd + "). Make sure it's gone by then." };
+  return null;
+}
+
+/* ============ avalanche projection ============ */
+function project(extra) {
+  const cards = state.cards
+    .filter(c => c.balance > 0.005)
+    .map(c => ({ bal: c.balance, apr: c.apr, min: c.minPayment, promoEnd: c.promoEnd, id: c.id }));
+  const budget = state.cards.reduce((s, c) => s + (c.balance > 0.005 ? c.minPayment : 0), 0) + extra;
+  const payoffMonth = {};   // card id -> Date paid off
+  let totalInterest = 0, months = 0;
+  const now = new Date();
+  if (!cards.length) return { months: 0, totalInterest: 0, date: now, payoffMonth, stalled: false };
+
+  while (cards.some(c => c.bal > 0.005) && months < 600) {
+    months++;
+    const simDate = new Date(now.getFullYear(), now.getMonth() + months, 1);
+    // 1. accrue interest (0% while a promo is still active in the simulated month)
+    for (const c of cards) {
+      if (c.bal <= 0.005) continue;
+      const promoActive = c.promoEnd && new Date(c.promoEnd + "T00:00:00") >= simDate;
+      const apr = promoActive ? 0 : c.apr;
+      const i = c.bal * apr / 1200;
+      c.bal += i; totalInterest += i;
+    }
+    // 2. minimums on every active card
+    let pool = budget;
+    for (const c of cards) {
+      if (c.bal <= 0.005) continue;
+      const p = Math.min(c.min, c.bal, pool);
+      c.bal -= p; pool -= p;
+      if (c.bal <= 0.005 && !payoffMonth[c.id]) payoffMonth[c.id] = simDate;
+    }
+    // 3. everything left attacks the highest-APR card, rolling to the next
+    const byApr = [...cards].filter(c => c.bal > 0.005).sort((a, b) => b.apr - a.apr);
+    for (const c of byApr) {
+      if (pool <= 0.005) break;
+      const p = Math.min(pool, c.bal);
+      c.bal -= p; pool -= p;
+      if (c.bal <= 0.005 && !payoffMonth[c.id]) payoffMonth[c.id] = simDate;
+    }
+  }
+  const stalled = months >= 600;
+  return { months, totalInterest, date: new Date(now.getFullYear(), now.getMonth() + months, 1), payoffMonth, stalled };
+}
+
+/* ============ render ============ */
+function render() {
+  const totalRemaining = state.cards.reduce((s, c) => s + Math.max(c.balance, 0), 0);
+  const totalStart = state.cards.reduce((s, c) => s + Math.max(c.startBalance || 0, c.balance, 0), 0);
+  const paidOff = Math.max(totalStart - totalRemaining, 0);
+  const pct = totalStart > 0 ? Math.min(paidOff / totalStart * 100, 100) : 0;
+
+  $("totalRemaining").textContent = fmt$c(totalRemaining);
+  $("cardCount").textContent = state.cards.filter(c => c.balance > 0.005).length;
+  $("progressBar").style.width = pct.toFixed(1) + "%";
+  $("progressPct").textContent = pct.toFixed(1) + "%";
+  $("paidOffLabel").textContent = fmt$(paidOff) + " paid off of " + fmt$(totalStart);
+
+  const minTotal = state.cards.reduce((s, c) => s + (c.balance > 0.005 ? c.minPayment : 0), 0);
+  $("minTotal").textContent = fmt$(minTotal);
+
+  // projection
+  const proj = project(state.extra);
+  if (totalRemaining <= 0.005) {
+    $("debtFreeDate").textContent = "DONE 🎉"; $("monthsLeft").textContent = "0"; $("totalInterest").textContent = "$0";
+    $("budgetAlert").innerHTML = "";
+  } else if (proj.stalled) {
+    $("debtFreeDate").textContent = "never"; $("monthsLeft").textContent = "600+"; $("totalInterest").textContent = "—";
+    $("budgetAlert").innerHTML = '<div class="alert bad">Minimums + extra don\'t cover the interest — the balance never shrinks. Raise the extra payment.</div>';
+  } else {
+    $("debtFreeDate").textContent = monthName(proj.date);
+    $("monthsLeft").textContent = proj.months;
+    $("totalInterest").textContent = fmt$(proj.totalInterest);
+    $("budgetAlert").innerHTML = "";
+  }
+
+  // card list
+  const atk = attackCard();
+  const list = $("cardList");
+  list.innerHTML = "";
+  sortedCards().forEach((c, idx) => {
+    const isPaid = c.balance <= 0.005;
+    const isAtk = atk && c.id === atk.id;
+    const div = document.createElement("div");
+    div.className = "card-item" + (isAtk ? " attack" : "") + (isPaid ? " paid" : "");
+    const start = Math.max(c.startBalance || 0, c.balance);
+    const cardPct = start > 0 ? Math.min((start - c.balance) / start * 100, 100) : 100;
+    const po = proj.payoffMonth[c.id];
+    const promo = promoStatus(c);
+    div.innerHTML =
+      '<div class="card-top"><div>' +
+        '<span class="card-order">#' + (idx + 1) + '</span> <span class="card-name">' + esc(c.name) + '</span>' +
+        (isAtk ? '<span class="badge attack-b">Attack</span>' : "") +
+        (isPaid ? '<span class="badge paid-b">Paid off</span>' : "") +
+        (c.promoEnd && !isPaid ? '<span class="badge promo-b">0% promo</span>' : "") +
+      '</div><div class="card-bal">' + fmt$c(Math.max(c.balance, 0)) + '</div></div>' +
+      '<div class="card-meta"><span>APR ' + c.apr.toFixed(2) + '%</span><span>Min ' + fmt$(c.minPayment) + '/mo</span>' +
+        (c.promoEnd ? '<span>Promo ends ' + c.promoEnd + '</span>' : "") + '</div>' +
+      (po && !isPaid ? '<div class="card-payoff">Paid off ' + monthName(po) + ' at current plan</div>' : "") +
+      '<div class="mini-bar"><div style="width:' + cardPct.toFixed(1) + '%"></div></div>' +
+      (promo ? '<div class="promo-warn ' + promo.cls + '">' + promo.text + '</div>' : "") +
+      '<div class="card-actions"><button class="btn-ghost btn-small" data-edit="' + c.id + '">Edit</button></div>';
+    list.appendChild(div);
+  });
+
+  // payment form card options
+  const sel = $("payCard");
+  const cur = sel.value;
+  sel.innerHTML = "";
+  sortedCards().forEach(c => {
+    const o = document.createElement("option");
+    o.value = c.id;
+    o.textContent = c.name + " — " + fmt$c(Math.max(c.balance, 0));
+    sel.appendChild(o);
+  });
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+
+  // history
+  const hist = $("payHistory");
+  hist.innerHTML = "";
+  const pays = [...state.payments].sort((a, b) => b.date.localeCompare(a.date) || b.ts - a.ts);
+  if (!pays.length) hist.innerHTML = '<div class="empty">No payments logged yet. Every one you log updates the balances above.</div>';
+  pays.slice(0, 60).forEach(p => {
+    const card = state.cards.find(c => c.id === p.cardId);
+    const row = document.createElement("div");
+    row.className = "pay-item";
+    row.innerHTML = '<div><div class="who">' + esc(card ? card.name : "(deleted card)") + '</div>' +
+      '<div class="when">' + p.date + '</div></div>' +
+      '<span class="amt">−' + fmt$c(p.amount) + '</span>' +
+      '<button class="pay-del" data-delpay="' + p.id + '">Undo</button>';
+    hist.appendChild(row);
+  });
+
+  // extra inputs
+  if (document.activeElement !== $("extraInput")) $("extraInput").value = state.extra || "";
+  $("extraSlider").value = Math.min(state.extra, 3000);
+}
+
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+/* ============ extra payment ============ */
+function setExtra(v) {
+  state.extra = Math.max(0, Number(v) || 0);
+  save(); render();
+}
+$("extraInput").addEventListener("input", e => setExtra(e.target.value));
+$("extraSlider").addEventListener("input", e => { setExtra(e.target.value); });
+
+/* ============ card modal ============ */
+let editingId = null;
+function openCardModal(card) {
+  editingId = card ? card.id : null;
+  $("cardModalTitle").textContent = card ? "Edit " + card.name : "Add card";
+  $("fName").value = card ? card.name : "";
+  $("fBalance").value = card ? card.balance : "";
+  $("fApr").value = card ? card.apr : "";
+  $("fMin").value = card ? card.minPayment : "";
+  $("fPromo").value = card ? card.promoEnd : "";
+  $("fStart").value = card ? (card.startBalance || card.balance) : "";
+  $("deleteCardBtn").style.display = card ? "" : "none";
+  $("cardModal").classList.add("open");
+}
+$("addCardBtn").addEventListener("click", () => openCardModal(null));
+$("cardList").addEventListener("click", e => {
+  const id = e.target.dataset && e.target.dataset.edit;
+  if (id) openCardModal(state.cards.find(c => c.id === id));
+});
+$("cancelCardBtn").addEventListener("click", () => $("cardModal").classList.remove("open"));
+$("cardModal").addEventListener("click", e => { if (e.target === $("cardModal")) $("cardModal").classList.remove("open"); });
+
+$("saveCardBtn").addEventListener("click", () => {
+  const name = $("fName").value.trim();
+  if (!name) { alert("Give the card a name."); return; }
+  const balance = Math.max(0, Number($("fBalance").value) || 0);
+  const apr = Math.max(0, Number($("fApr").value) || 0);
+  const minPayment = Math.max(0, Number($("fMin").value) || 0);
+  const promoEnd = $("fPromo").value || "";
+  const startBalance = Math.max(0, Number($("fStart").value) || balance);
+  if (editingId) {
+    const c = state.cards.find(c => c.id === editingId);
+    Object.assign(c, { name, balance, apr, minPayment, promoEnd, startBalance });
+  } else {
+    state.cards.push({ id: uid(), name, balance, apr, minPayment, promoEnd, startBalance });
+  }
+  save(); render();
+  $("cardModal").classList.remove("open");
+});
+
+$("deleteCardBtn").addEventListener("click", () => {
+  if (!editingId) return;
+  const c = state.cards.find(c => c.id === editingId);
+  if (!confirm("Delete " + c.name + "? Its payment history stays in the log.")) return;
+  state.cards = state.cards.filter(x => x.id !== editingId);
+  save(); render();
+  $("cardModal").classList.remove("open");
+});
+
+/* ============ payments ============ */
+$("payDate").value = new Date().toISOString().slice(0, 10);
+$("logPayBtn").addEventListener("click", () => {
+  const cardId = $("payCard").value;
+  const amount = Number($("payAmount").value);
+  const date = $("payDate").value || new Date().toISOString().slice(0, 10);
+  const card = state.cards.find(c => c.id === cardId);
+  if (!card) { alert("Pick a card."); return; }
+  if (!(amount > 0)) { alert("Enter an amount above $0."); return; }
+  const wasPositive = card.balance > 0.005;
+  card.balance = Math.max(0, card.balance - amount);
+  state.payments.push({ id: uid(), cardId, amount, date, ts: Date.now() });
+  save(); render();
+  $("payAmount").value = "";
+  if (wasPositive && card.balance <= 0.005) celebrate(card);
+});
+
+$("payHistory").addEventListener("click", e => {
+  const id = e.target.dataset && e.target.dataset.delpay;
+  if (!id) return;
+  const p = state.payments.find(p => p.id === id);
+  if (!p) return;
+  if (!confirm("Undo this " + fmt$c(p.amount) + " payment? The balance goes back up.")) return;
+  const card = state.cards.find(c => c.id === p.cardId);
+  if (card) card.balance += p.amount;
+  state.payments = state.payments.filter(x => x.id !== id);
+  save(); render();
+});
+
+/* ============ celebration ============ */
+function celebrate(card) {
+  const left = state.cards.filter(c => c.balance > 0.005).length;
+  $("celebrateTitle").textContent = card.name + " is at $0!";
+  $("celebrateMsg").textContent = left === 0
+    ? "THAT WAS THE LAST ONE. You are completely debt-free. 🏆"
+    : "One down, " + left + " to go. Its " + fmt$(card.minPayment) + " minimum now rolls onto the next card automatically.";
+  $("celebrate").classList.add("open");
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement("span");
+    s.className = "confetti";
+    s.textContent = ["🎉", "💸", "✨", "🎊", "💚"][i % 5];
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.animationDuration = (2.2 + Math.random() * 2.5) + "s";
+    s.style.animationDelay = (Math.random() * 0.8) + "s";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 6000);
+  }
+}
+$("celebrateClose").addEventListener("click", () => $("celebrate").classList.remove("open"));
+
+/* ============ export / import ============ */
+$("exportBtn").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "debt-tracker-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+$("importBtn").addEventListener("click", () => $("importFile").click());
+$("importFile").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      if (!Array.isArray(data.cards) || !Array.isArray(data.payments)) throw new Error("bad format");
+      if (!confirm("Replace everything currently in the tracker with this backup?")) return;
+      state = data; save(); render();
+    } catch (err) { alert("That file doesn't look like a tracker backup."); }
+    e.target.value = "";
+  };
+  r.readAsText(f);
+});
+
+/* ============ offline (service worker; only works over http/https) ============ */
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  navigator.serviceWorker.register("./debt-sw.js").catch(() => {});
+}
+
+render();
+</script>
+</body>
+</html>
